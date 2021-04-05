@@ -1,0 +1,134 @@
+<html>
+
+<head>
+	<title>Javascript Pong Game</title>
+	<canvas style="padding-left: 0;padding-right: 0;margin-left: auto;margin-right: auto;display: block;width: 800px;" id="gameCanvas" width="810" height="610"></canvas>
+</head>
+
+<body>
+	<style>
+		body {
+			background-color: #ef9b40;
+		}
+	</style>
+	<script>
+		var canvas;
+		var canvasContext;
+		var ballX = 400;
+		var ballSpeedX = 0; //dont change
+		var ballY = 300;
+		var ballSpeedY = 10;
+		var paddleY1 = 220;
+		var paddleY2 = 220;
+		var paddlespeed = 30;
+		var keys = [];
+		var ballSize = 10;
+		window.addEventListener("keydown", keysPressed, false);
+		window.addEventListener("keyup", keysReleased, false);
+
+
+		window.onload = function() {
+			canvas = document.getElementById('gameCanvas');
+			canvasContext = canvas.getContext('2d');
+			ballSpeedX = Math.sign(Math.random()-0.5)*10
+
+			// Determine refresh rate in which the functions are executed
+			var FramesPerSecond = 30;
+			setInterval(function() {
+				moveEverything();
+				drawEverything();
+			}, 1000 / FramesPerSecond);
+		}
+
+		function keysPressed(e) {
+			// store an entry for every key pressed
+			keys[e.keyCode] = true;
+
+			if (keys[87] && keys[38]) {
+				// Left up Right up
+				paddleY1 -= paddlespeed
+				paddleY2 -= paddlespeed
+			} else if (keys[87] && keys[40]) {
+				// Left up Right Down
+				paddleY1 -= paddlespeed
+				paddleY2 += paddlespeed
+			} else if (keys[83] && keys[38]) {
+				// Left Down Right Up
+				paddleY1 += paddlespeed
+				paddleY2 -= paddlespeed
+			} else if (keys[83] && keys[40]) {
+				// Left Down Right Down
+				paddleY1 += paddlespeed
+				paddleY2 += paddlespeed
+			} else if (keys[87]) {
+				// Left up only
+				paddleY1 -= paddlespeed
+			} else if (keys[83]) {
+				// Left down only
+				paddleY1 += paddlespeed
+			} else if (keys[38]) {
+				// Right up only
+				paddleY2 -= paddlespeed
+			} else if (keys[40]) {
+				//Right down only
+				paddleY2 += paddlespeed
+			}
+
+		}
+
+		function keysReleased(e) {
+			// mark keys that were released
+			keys[e.keyCode] = false;
+		}
+
+		function moveEverything() {
+			ballX += ballSpeedX;
+			ballY = Math.round (ballY + ballSpeedY);
+
+ 		//x collisions
+			if (ballX == canvas.width - ballSize || ballX == ballSize) {
+				ballSpeedX = -ballSpeedX
+			} else if (true == false) {
+				//hits paddle
+			}
+
+			//y collisions
+			if (ballY == canvas.height - ballSize || ballY == ballSize) {
+				ballSpeedY = -ballSpeedY
+			} else if (true == false) {
+				//hits paddle
+			}
+
+
+		}
+
+		function drawEverything() {
+			// Line fills canvas with black
+			colorRect(0, 0, canvas.width, canvas.height, 'black');
+			// Left player paddle
+			colorRect(30, paddleY1, 15, 125, 'white');
+			colorRect((canvas.width - 15) - 30, paddleY2, 15, 125, 'white');
+			//ball
+			colorCircle(ballX, ballY, ballSize, 'white');
+		}
+
+		function colorCircle(centerX, centerY, radius, drawColor) {
+			// Function creating circular ball
+			canvasContext.fillStyle = drawColor;
+			canvasContext.beginPath();
+			canvasContext.arc(centerX, centerY, radius, 0, 2 * Math.PI, true);
+			canvasContext.fill()
+			//canvasContext.arc argument s (x and y positions, radius, angle and radian,
+			// true/false dictates direction (counterclockwise or clockwise)
+			//Math.PI = semi-circle
+		}
+
+
+		function colorRect(leftX, topY, width, height, drawColor) {
+			canvasContext.fillStyle = drawColor;
+			canvasContext.fillRect(leftX, topY, width, height);
+		}
+	</script>
+</body>
+
+</html>
